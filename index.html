@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Neon Google Drive Link Converter</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(ellipse at center, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 30px;
+    }
+
+    .container {
+      background: #1a1a2e;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #00f5ff;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      outline: none;
+      background: #0f0f1f;
+      color: #00f5ff;
+      border: 1px solid #00f5ff;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: #00f5ff;
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 0 10px #00f5ff, 0 0 20px #00f5ff;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      box-shadow: 0 0 15px #00f5ff, 0 0 30px #00f5ff;
+      transform: scale(1.05);
+    }
+
+    .output {
+      margin-top: 30px;
+    }
+
+    img {
+      margin-top: 15px;
+      max-width: 100%;
+      border-radius: 12px;
+      border: 2px solid #00f5ff;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+
+    textarea {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      resize: none;
+      font-family: monospace;
+      font-size: 14px;
+      background-color: #0d0d1a;
+      color: #00f5ff;
+      border: 1px solid #00f5ff;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    textarea:focus {
+      background-color: #13132a;
+    }
+
+    .copied {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #00ffcc;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Google Drive Link Converter 🔁</h2>
+    <input type="text" id="driveLink" placeholder="Paste your Google Drive link here..." />
+    <button onclick="convertLink()">Convert</button>
+
+    <div class="output" id="result" style="display: none;">
+      <h3 style="color:#00f5ff;">Image Preview:</h3>
+      <img id="preview" src="" alt="Converted Image" />
+      <h4 style="margin-top:20px;color:#00ffcc;">Embed Code (click to copy):</h4>
+      <textarea id="imgCode" rows="3" readonly onclick="copyToClipboard()"></textarea>
+      <div class="copied" id="copiedMsg">✅ Embed code copied!</div>
+    </div>
+  </div>
+
+  <script>
+    function convertLink() {
+      const input = document.getElementById("driveLink").value.trim();
+      const match = input.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+      if (match && match[1]) {
+        const fileId = match[1];
+        const newLink = `https://lh3.googleusercontent.com/d/${fileId}`;
+        const imgTag = `<img src="${newLink}" alt="Uploaded Image" />`;
+
+        document.getElementById("preview").src = newLink;
+        document.getElementById("imgCode").value = imgTag;
+        document.getElementById("result").style.display = "block";
+        document.getElementById("copiedMsg").style.display = "none";
+      } else {
+        alert("❌ Please enter a valid Google Drive link!");
+      }
+    }
+
+    function copyToClipboard() {
+      const textarea = document.getElementById("imgCode");
+      textarea.select();
+      textarea.setSelectionRange(0, 99999); // For mobile
+      document.execCommand("copy");
+
+      const msg = document.getElementById("copiedMsg");
+      msg.style.display = "block";
+
+      setTimeout(() => {
+        msg.style.display = "none";
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
